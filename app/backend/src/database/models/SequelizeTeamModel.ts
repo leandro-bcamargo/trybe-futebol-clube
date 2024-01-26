@@ -11,19 +11,19 @@ SequelizeTeamModel.init({
     type: DataTypes.INTEGER,
     allowNull: false,
     autoIncrement: true,
-    primaryKey: true
+    primaryKey: true,
   },
   teamName: {
     type: DataTypes.STRING,
     allowNull: false,
     field: 'team_name',
-  }
+  },
 }, {
   sequelize: db,
   tableName: 'teams',
   modelName: 'team',
   underscored: true,
   timestamps: false,
-})
+});
 
 export default SequelizeTeamModel;
