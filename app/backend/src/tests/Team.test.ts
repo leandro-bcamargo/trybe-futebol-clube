@@ -26,4 +26,20 @@ describe('Team test', () => {
       expect(body).to.be.deep.equal(TeamsMock);
     })
   })
+
+  describe('Route GET /teams/:id', () => {
+    it('Should return a team by id', async function() {
+      sinon.stub(SequelizeTeamModel, 'findOne').resolves(TeamsMock[0] as any);
+      const {status, body} = await chai.request(app).get('/teams/1');
+      expect(status).to.be.equal(200);
+      expect(body).to.be.deep.equal(TeamsMock[0]);
+    })
+
+    it('Should return status 404 and message if team is not found', async function() {
+      sinon.stub(SequelizeTeamModel, 'findOne').resolves(null);
+      const {status, body} = await chai.request(app).get('/teams/99');
+      expect(status).to.be.equal(404);
+      expect(body).to.be.deep.equal({message: "A team with id 99 hasn't been found"});
+    })
 });
+})
