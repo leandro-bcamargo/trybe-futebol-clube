@@ -13,12 +13,12 @@ export default class UserService {
     const user = await this.userModel.getByEmail(email);
 
     if (!user) {
-      return { status: 'NOT_FOUND',
-        data: { message: 'User not found in database' } };
+      return { status: 'UNAUTHORIZED',
+        data: { message: 'Invalid email or password' } };
     }
 
     if (!bcrypt.compareSync(password, user.password)) {
-      return { status: 'INVALID_DATA', data: { message: 'Invalid email or password' } };
+      return { status: 'UNAUTHORIZED', data: { message: 'Invalid email or password' } };
     }
 
     const token = this.jwtService.sign({ email });
