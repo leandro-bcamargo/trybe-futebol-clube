@@ -1,3 +1,3 @@
 import IUser from './IUser';
 
-export type TUserResponse = Omit<IUser, 'password'>;
+export type IUserResponse = Omit<IUser, 'password'>;
