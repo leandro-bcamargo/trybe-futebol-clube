@@ -6,6 +6,7 @@ export default class UserModel implements IUserModel {
   private model = SequelizeUserModel;
 
   public async getByEmail(email: string): Promise<IUser | null> {
+    if (!email) return null;
     const user = await this.model.findOne({ where: { email } });
     if (!user) return null;
 
