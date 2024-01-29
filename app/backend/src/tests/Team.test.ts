@@ -1,7 +1,7 @@
-import * as sinon from 'sinon';
-import * as chai from 'chai';
+import sinon from 'sinon';
+import chai from 'chai';
 // @ts-ignore
-import chaiHttp = require('chai-http');
+import chaiHttp from 'chai-http';
 
 import { app } from '../app';
 import Example from '../database/models/ExampleModel';

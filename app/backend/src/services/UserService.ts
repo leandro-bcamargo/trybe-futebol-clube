@@ -6,15 +6,17 @@ import UserModel from '../models/UserModel';
 import ILogin from '../interfaces/ILogin';
 
 export default class UserService {
-  constructor(private userModel = new UserModel(), private jwtService = JWT) {}
+  constructor(private userModel = new UserModel(), private jwtService = JWT) { }
 
   public async login({ email, password }: ILogin):
   Promise<ServiceResponse<IToken | ServiceMessage>> {
     const user = await this.userModel.getByEmail(email);
 
     if (!user) {
-      return { status: 'UNAUTHORIZED',
-        data: { message: 'Invalid email or password' } };
+      return {
+        status: 'UNAUTHORIZED',
+        data: { message: 'Invalid email or password' },
+      };
     }
 
     if (!bcrypt.compareSync(password, user.password)) {
