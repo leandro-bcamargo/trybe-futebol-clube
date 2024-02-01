@@ -20,4 +20,20 @@ export default class MatchModel implements IMatchModel {
 
     return matches;
   }
+
+  public async finishMatch(id: number): Promise<string | null> {
+    const match = await this.model.findOne({
+      where: { id },
+    });
+    if (!match) return null;
+
+    const [affectedRows] = await this.model.update(
+      { inProgress: false },
+      { where: { id } },
+    );
+
+    if (!affectedRows) return 'The match is already finished';
+
+    return 'Finished';
+  }
 }
