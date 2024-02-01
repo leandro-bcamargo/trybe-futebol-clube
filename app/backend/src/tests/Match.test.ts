@@ -10,7 +10,7 @@ import { Response } from 'superagent';
 import SequelizeTeamModel from '../database/models/SequelizeTeamModel';
 import TeamsMock from './mocks/TeamsMock';
 import SequelizeMatchModel from '../database/models/SequelizeMatchModel';
-import MatchesMock from './mocks/MatchesMock';
+import {allMatchesMock, finishedMatchesMock, inProgressMatchesMock} from './mocks/MatchesMock';
 
 chai.use(chaiHttp);
 
@@ -21,11 +21,25 @@ describe('Matches test', () => {
     sinon.restore();
   })
   describe('Route GET /matches', () => {
-    it('Should return all matches', async () => {
-      sinon.stub(SequelizeMatchModel, 'findAll').resolves(MatchesMock as any);
+    it('Should return all matches if no query params are provided', async () => {
+      sinon.stub(SequelizeMatchModel, 'findAll').resolves(allMatchesMock as any);
       const {status, body} = await chai.request(app).get('/matches');
       expect(status).to.be.equal(200);
-      expect(body).to.be.deep.equal(MatchesMock);
+      expect(body).to.be.deep.equal(allMatchesMock);
+    })
+
+    it('Should return matches in progress with query params inProgress=true', async () => {
+      sinon.stub(SequelizeMatchModel, 'findAll').resolves(inProgressMatchesMock as any);
+      const {status, body} = await chai.request(app).get('/matches?inProgress=true');
+      expect(status).to.be.equal(200);
+      expect(body).to.deep.equal(inProgressMatchesMock)
+    })
+
+    it('Should return matches finished with query params inProgress=false', async () => {
+      sinon.stub(SequelizeMatchModel, 'findAll').resolves(finishedMatchesMock as any);
+      const {status, body} = await chai.request(app).get('/matches?inProgress=false');
+      expect(status).to.be.equal(200);
+      expect(body).to.deep.equal(finishedMatchesMock)
     })
   })
 })

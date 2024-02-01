@@ -1,23 +1,88 @@
-export default [
+export const allMatchesMock = [
   {
-    home_team_id: 16,
-    home_team_goals: 1,
-    away_team_id: 8,
-    away_team_goals: 1,
-    in_progress: false,
+    "homeTeamId": 16,
+    "homeTeamGoals": 1,
+    "awayTeamId": 8,
+    "awayTeamGoals": 1,
+    "inProgress": false,
+    "homeTeam": {
+      "teamName": "São Paulo"
+    }
   },
   {
-    home_team_id: 9,
-    home_team_goals: 1,
-    away_team_id: 14,
-    away_team_goals: 1,
-    in_progress: false,
+    "homeTeamId": 9,
+    "homeTeamGoals": 1,
+    "awayTeamId": 14,
+    "awayTeamGoals": 1,
+    "inProgress": false,
+    "homeTeam": {
+      "teamName": "Corinthians"
+    }
   },
   {
-    home_team_id: 4,
-    home_team_goals: 3,
-    away_team_id: 11,
-    away_team_goals: 0,
-    in_progress: false,
+    "homeTeamId": 11,
+    "homeTeamGoals": 0,
+    "awayTeamId": 10,
+    "awayTeamGoals": 0,
+    "inProgress": true,
+    "homeTeam": {
+      "teamName": "Palmeiras"
+    },
+  },
+  {
+    "homeTeamId": 7,
+    "homeTeamGoals": 2,
+    "awayTeamId": 15,
+    "awayTeamGoals": 2,
+    "inProgress": true,
+    "homeTeam": {
+      "teamName": "Santos"
+    },
+  }
+]
+
+export const inProgressMatchesMock = [
+  {
+    "homeTeamId": 11,
+    "homeTeamGoals": 0,
+    "awayTeamId": 10,
+    "awayTeamGoals": 0,
+    "inProgress": true,
+    "homeTeam": {
+      "teamName": "Guarani"
+    },
+  },
+  {
+    "homeTeamId": 7,
+    "homeTeamGoals": 2,
+    "awayTeamId": 15,
+    "awayTeamGoals": 2,
+    "inProgress": true,
+    "homeTeam": {
+      "teamName": "Ponte Preta"
+    },
+  }
+]
+
+export const finishedMatchesMock = [
+  {
+    "homeTeamId": 16,
+    "homeTeamGoals": 1,
+    "awayTeamId": 8,
+    "awayTeamGoals": 1,
+    "inProgress": false,
+    "homeTeam": {
+      "teamName": "Grêmio"
+    }
+  },
+  {
+    "homeTeamId": 9,
+    "homeTeamGoals": 1,
+    "awayTeamId": 14,
+    "awayTeamGoals": 1,
+    "inProgress": false,
+    "homeTeam": {
+      "teamName": "Internacional"
+    }
   },
 ]
