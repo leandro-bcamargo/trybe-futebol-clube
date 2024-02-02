@@ -1,5 +1,7 @@
 import express from 'express';
 import router from './routes';
+import 'express-async-errors';
+import ErrorMiddleware from './middlewares/ErrorMiddleware';
 
 class App {
   public app: express.Express;
@@ -19,7 +21,7 @@ class App {
     this.app.use(router);
   }
 
-  private config():void {
+  private config(): void {
     const accessControl: express.RequestHandler = (_req, res, next) => {
       res.header('Access-Control-Allow-Origin', '*');
       res.header('Access-Control-Allow-Methods', 'GET,POST,DELETE,OPTIONS,PUT,PATCH');
@@ -29,9 +31,10 @@ class App {
 
     this.app.use(express.json());
     this.app.use(accessControl);
+    this.app.use(ErrorMiddleware.error);
   }
 
-  public start(PORT: string | number):void {
+  public start(PORT: string | number): void {
     this.app.listen(PORT, () => console.log(`Running on port ${PORT}`));
   }
 }

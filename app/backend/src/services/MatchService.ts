@@ -1,3 +1,4 @@
+import CustomError from '../utils/CustomError';
 import IMatch from '../interfaces/IMatch';
 import IMatchModel from '../interfaces/IMatchModel';
 import { ServiceMessage, ServiceResponse } from '../interfaces/ServiceResponse';
@@ -14,12 +15,11 @@ export default class MatchService {
 
   public async finishMatch(id: number): Promise<ServiceResponse<ServiceMessage>> {
     const finished = await this.matchModel.finishMatch(id);
+    console.log('match service finished:', finished);
 
-    if (!finished) return { status: 'NOT_FOUND', data: { message: 'Match not found' } };
+    if (finished === 'NOT FOUND') throw new CustomError('NOT_FOUND', 'Match not found');
 
-    if (finished === 'The match is already finished') {
-      return { status: 'CONFLICT', data: { message: finished } };
-    }
+    if (finished === 'CONFLICT') throw new CustomError('CONFLICT', 'The match is already finished');
 
     return { status: 'SUCCESSFUL', data: { message: finished } };
   }

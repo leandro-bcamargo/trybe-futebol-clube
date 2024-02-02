@@ -1,24 +1,35 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import MatchService from '../services/MatchService';
 import mapStatusHttp from '../utils/mapStatusHttp';
 
 export default class MatchController {
   constructor(private matchService = new MatchService()) { }
 
-  public async getAll(req: Request, res: Response) {
-    const { inProgress } = req.query;
-    let isInProgress;
-    if (inProgress !== undefined) {
-      isInProgress = inProgress === 'true';
+  public async getAll(req: Request, res: Response, next: NextFunction):
+  Promise<Response | undefined> {
+    try {
+      const { inProgress } = req.query;
+      let isInProgress;
+      if (inProgress !== undefined) {
+        isInProgress = inProgress === 'true';
+      }
+      const { status, data } = await this.matchService.getAll(isInProgress);
+      return res.status(mapStatusHttp(status)).json(data);
+    } catch (error) {
+      console.log('match controller error:', error);
+      next(error);
     }
-    const { status, data } = await this.matchService.getAll(isInProgress);
-    return res.status(mapStatusHttp(status)).json(data);
   }
 
-  public async finishMatch(req: Request, res: Response) {
-    const { id } = req.params;
-    const { status, data } = await this.matchService.finishMatch(Number(id));
+  public async finishMatch(req: Request, res: Response, next: NextFunction):
+  Promise<Response | undefined> {
+    try {
+      const { id } = req.params;
+      const { status, data } = await this.matchService.finishMatch(Number(id));
 
-    return res.status(mapStatusHttp(status)).json(data);
+      return res.status(mapStatusHttp(status)).json(data);
+    } catch (error) {
+      next(error);
+    }
   }
 }
