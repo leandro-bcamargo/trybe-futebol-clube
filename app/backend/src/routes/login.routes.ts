@@ -9,7 +9,7 @@ const router = Router();
 
 router.post(
   '/',
-  LoginValidation.validate,
+  (req: Request, res: Response, next: NextFunction) => LoginValidation.validate(req, res, next),
   (req: Request, res: Response, next: NextFunction) => userController.login(req, res, next),
 );
 

@@ -20,6 +20,7 @@ export default class LoginValidation {
   }
 
   static handleError(error: Joi.ValidationError) {
+    // console.log('login validation error:', error)
     const { type } = error.details[0];
     const { message } = error.details[0];
     if (type === 'any.required') throw new CustomError('INVALID_DATA', message);
@@ -27,15 +28,11 @@ export default class LoginValidation {
   }
 
   static validate(req: Request, res: Response, next: NextFunction): Response | void {
-    try {
-      // const { email, password } = req.body;
-      const error = this.validateInput(req.body.email, req.body.password);
-      if (error) {
-        this.handleError(error);
-      }
-      next();
-    } catch (error) {
-      next(error);
+    const { email, password } = req.body;
+    const error = this.validateInput(email, password);
+    if (error) {
+      this.handleError(error);
     }
+    next();
   }
 }

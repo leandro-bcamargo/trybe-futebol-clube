@@ -16,7 +16,7 @@ export default class MatchController {
       const { status, data } = await this.matchService.getAll(isInProgress);
       return res.status(mapStatusHttp(status)).json(data);
     } catch (error) {
-      console.log('match controller error:', error);
+      // console.log('match controller error:', error);
       next(error);
     }
   }
