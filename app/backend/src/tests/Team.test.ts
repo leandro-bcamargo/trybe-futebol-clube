@@ -39,7 +39,7 @@ describe('Team test', () => {
       sinon.stub(SequelizeTeamModel, 'findOne').resolves(null);
       const {status, body} = await chai.request(app).get('/teams/99');
       expect(status).to.be.equal(404);
-      expect(body).to.be.deep.equal({message: "A team with id 99 hasn't been found"});
+      expect(body).to.be.deep.equal({message: "Team not found"});
     })
 });
 })

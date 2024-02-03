@@ -62,7 +62,9 @@ describe('User test', () => {
 
     it('Should not be able to login if email isn\'t found in datababase', async () => {
       sinon.stub(SequelizeUserModel, 'findOne').resolves(null);
-      sinon.stub(LoginValidation, 'validate').returns();
+      sinon.stub(LoginValidation, 'validate').callsFake((req, res, next) => {
+        next();
+      });
       const { status, body } = await chai.request(app).post('/login').send(validLoginBody);
       expect(status).to.be.equal(401);
       expect(body).to.be.deep.equal({ message: 'Invalid email or password' });
@@ -71,7 +73,9 @@ describe('User test', () => {
     it('Should return a token when login is successful', async () => {
       sinon.stub(SequelizeUserModel, 'findOne').resolves(UsersMock[0] as any);
       sinon.stub(JWT, 'sign').returns('validToken');
-      sinon.stub(LoginValidation, 'validate').returns();
+      sinon.stub(LoginValidation, 'validate').callsFake((req, res, next) => {
+        next();
+      });
       const { status, body } = await chai.request(app).post('/login').send(validLoginBody);
       expect(status).to.be.equal(200);
       expect(body).to.deep.equal({ token: 'validToken' })
