@@ -3,6 +3,7 @@ import IMatch from '../interfaces/IMatch';
 import IMatchModel from '../interfaces/IMatchModel';
 import { ServiceMessage, ServiceResponse } from '../interfaces/ServiceResponse';
 import MatchModel from '../models/MatchModel';
+import IUpdateMatchResult from '../interfaces/IUpdateMatchResult';
 
 export default class MatchService {
   constructor(private matchModel: IMatchModel = new MatchModel()) { }
@@ -22,5 +23,14 @@ export default class MatchService {
     if (finished === 'CONFLICT') throw new CustomError('CONFLICT', 'The match is already finished');
 
     return { status: 'SUCCESSFUL', data: { message: finished } };
+  }
+
+  public async updateResult(id: number, { homeTeamGoals, awayTeamGoals }:
+  IUpdateMatchResult): Promise<ServiceResponse<ServiceMessage>> {
+    const updated = await this.matchModel.updateResult(id, { homeTeamGoals, awayTeamGoals });
+
+    if (!updated) throw new CustomError('NOT_FOUND', 'Match not found');
+
+    return { status: 'SUCCESSFUL', data: { message: updated } };
   }
 }

@@ -10,6 +10,13 @@ router.get('/', (req: Request, res: Response, next: NextFunction) =>
   matchController.getAll(req, res, next));
 
 router.patch(
+  '/:id',
+  (req: Request, res: Response, next: NextFunction) => TokenValidation.validate(req, res, next),
+  (req: Request, res: Response, next: NextFunction) =>
+    matchController.updateResult(req, res, next),
+);
+
+router.patch(
   '/:id/finish',
   TokenValidation.validate,
   (req: Request, res: Response, next: NextFunction) =>

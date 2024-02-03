@@ -1,3 +1,4 @@
+import IUpdateMatchResult from '../interfaces/IUpdateMatchResult';
 import IMatch from '../interfaces/IMatch';
 import SequelizeMatchModel from '../database/models/SequelizeMatchModel';
 import IMatchModel from '../interfaces/IMatchModel';
@@ -35,5 +36,20 @@ export default class MatchModel implements IMatchModel {
     if (!affectedRows) return 'CONFLICT';
 
     return 'SUCCESSFUL';
+  }
+
+  public async updateResult(id: number, { homeTeamGoals, awayTeamGoals }:
+  IUpdateMatchResult): Promise<string | null> {
+    const [affectedRows] = await this.model.update(
+      {
+        homeTeamGoals,
+        awayTeamGoals,
+      },
+      { where: { id } },
+    );
+
+    if (!affectedRows) return null;
+
+    return 'Match successfully updated!';
   }
 }

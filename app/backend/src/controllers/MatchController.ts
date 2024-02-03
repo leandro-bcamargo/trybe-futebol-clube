@@ -32,4 +32,18 @@ export default class MatchController {
       next(error);
     }
   }
+
+  public async updateResult(req: Request, res: Response, next: NextFunction):
+  Promise<Response | undefined> {
+    try {
+      const { id } = req.params;
+      const { homeTeamGoals, awayTeamGoals } = req.body;
+      const { status, data } = await this.matchService
+        .updateResult(Number(id), { homeTeamGoals, awayTeamGoals });
+
+      return res.status(mapStatusHttp(status)).json(data);
+    } catch (error) {
+      next(error);
+    }
+  }
 }
