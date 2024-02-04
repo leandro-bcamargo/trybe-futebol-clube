@@ -18,11 +18,11 @@ export default class MatchService {
     const finished = await this.matchModel.finishMatch(id);
     // console.log('match service finished:', finished);
 
-    if (finished === 'NOT FOUND') throw new CustomError('NOT_FOUND', 'Match not found');
+    if (finished === 'NOT_FOUND') throw new CustomError('NOT_FOUND', 'Match not found');
 
     if (finished === 'CONFLICT') throw new CustomError('CONFLICT', 'The match is already finished');
 
-    return { status: 'SUCCESSFUL', data: { message: finished } };
+    return { status: 'SUCCESSFUL', data: { message: 'Finished' } };
   }
 
   public async updateResult(id: number, { homeTeamGoals, awayTeamGoals }:
