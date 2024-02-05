@@ -6,3 +6,5 @@ export default interface IMatch {
   awayTeamGoals: number;
   inProgress: boolean;
 }
+
+export type IMatchWithoutId = Omit<IMatch, 'id'>;

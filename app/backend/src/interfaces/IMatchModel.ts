@@ -6,4 +6,5 @@ export default interface IMatchModel {
   finishMatch(id: number): Promise<string>;
   updateResult(id: number, { homeTeamGoals, awayTeamGoals }: IUpdateMatchResult):
   Promise<string | null>;
+  create(match: IMatch): Promise<IMatch>;
 }

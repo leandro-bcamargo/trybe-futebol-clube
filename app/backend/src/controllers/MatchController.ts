@@ -46,4 +46,16 @@ export default class MatchController {
       next(error);
     }
   }
+
+  public async create(req: Request, res: Response, next: NextFunction):
+  Promise<Response | undefined> {
+    try {
+      const matchData = req.body;
+      const { status, data } = await this.matchService.create({ ...matchData, inProgress: true });
+
+      return res.status(mapStatusHttp(status)).json(data);
+    } catch (error) {
+      next(error);
+    }
+  }
 }

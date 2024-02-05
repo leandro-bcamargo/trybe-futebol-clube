@@ -52,4 +52,10 @@ export default class MatchModel implements IMatchModel {
 
     return 'Match successfully updated!';
   }
+
+  public async create(match: IMatch): Promise<IMatch> {
+    const newMatch = await this.model.create(match);
+
+    return newMatch;
+  }
 }

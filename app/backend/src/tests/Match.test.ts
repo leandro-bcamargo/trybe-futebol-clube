@@ -59,7 +59,6 @@ describe('Matches test', () => {
 
     it('Should return status 404 and Match not found', async function() {
       sinon.stub(SequelizeMatchModel, 'findOne').resolves(null);
-      // sinon.stub(SequelizeMatchModel, 'update').resolves([0]);
       sinon.stub(JWT, 'verify').returns(TokenPayloadMock);
       const {status, body} = await chai.request(app).patch('/matches/99/finish').set('authorization', 'validToken');
       expect(status).to.be.equal(404);
