@@ -75,4 +75,30 @@ describe('Matches test', () => {
       expect(body).to.deep.equal({message: 'The match is already finished'})
     })
   })
+
+  describe('Route PATCH /matches/:id', async function() {
+    it('Should return status 200 and update a match', async () => {
+      sinon.stub(SequelizeMatchModel, 'findOne').resolves(allMatchesMock[0] as any);
+      sinon.stub(SequelizeMatchModel, 'update').resolves([1]);
+      sinon.stub(JWT, 'verify').returns(TokenPayloadMock);
+      const { status, body } = await chai.request(app).patch('/matches/1').set('authorization', 'validToken').send({
+        homeTeamGoals: 1,
+        awayTeamGoals: 1
+      });
+      expect(status).to.be.equal(200);
+      expect(body).to.deep.equal({ message: 'Match successfully updated!' });
+    })
+
+    it('Should return status 404 and Match not found', async function() {
+      sinon.stub(SequelizeMatchModel, 'findOne').resolves(null);
+      sinon.stub(SequelizeMatchModel, 'update').resolves([0]);
+      sinon.stub(JWT, 'verify').returns(TokenPayloadMock);
+      const {status, body} = await chai.request(app).patch('/matches/99').set('authorization', 'validToken').send({
+        homeTeamGoals: 1,
+        awayTeamGoals: 1
+      });
+      expect(status).to.be.equal(404);
+      expect(body).to.deep.equal({message: 'Match not found'})
+    })
+  })
 })
