@@ -10,11 +10,12 @@ import { Response } from 'superagent';
 import SequelizeTeamModel from '../database/models/SequelizeTeamModel';
 import TeamsMock from './mocks/TeamsMock';
 import SequelizeMatchModel from '../database/models/SequelizeMatchModel';
-import { allMatchesMock, finishedMatchesMock, inProgressMatchesMock } from './mocks/MatchesMock';
+import { allMatchesMock, finishedMatchesMock, inProgressMatchesMock, matchMockWithId } from './mocks/MatchesMock';
 import LoginValidation from '../middlewares/LoginValidation';
 import JWT from '../utils/JWT';
 import TokenValidation from '../middlewares/TokenValidation';
 import TokenPayloadMock from './mocks/TokenPayloadMock';
+import CreateMatchBodyMock from './mocks/CreateMatchBodyMock';
 
 chai.use(chaiHttp);
 
@@ -98,6 +99,16 @@ describe('Matches test', () => {
       });
       expect(status).to.be.equal(404);
       expect(body).to.deep.equal({message: 'Match not found'})
+    })
+  })
+
+  describe('Route POST /matches', async function() {
+    it('Should return status 201 and create a match', async () => {
+      sinon.stub(SequelizeMatchModel, 'create').resolves(matchMockWithId as any);
+      sinon.stub(JWT, 'verify').returns(TokenPayloadMock);
+      const { status, body } = await chai.request(app).post('/matches').set('authorization', 'validToken').send(CreateMatchBodyMock);
+      expect(status).to.be.equal(201);
+      expect(body).to.deep.equal(matchMockWithId);
     })
   })
 })
