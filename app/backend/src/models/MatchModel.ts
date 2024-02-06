@@ -2,6 +2,8 @@ import IUpdateMatchResult from '../interfaces/IUpdateMatchResult';
 import IMatch from '../interfaces/IMatch';
 import SequelizeMatchModel from '../database/models/SequelizeMatchModel';
 import IMatchModel from '../interfaces/IMatchModel';
+import { ServiceResponseErrorType,
+  ServiceResponseSuccessType } from '../interfaces/ServiceResponse';
 
 export default class MatchModel implements IMatchModel {
   private model = SequelizeMatchModel;
@@ -22,7 +24,8 @@ export default class MatchModel implements IMatchModel {
     return matches;
   }
 
-  public async finishMatch(id: number): Promise<string> {
+  public async finishMatch(id: number):
+  Promise<ServiceResponseErrorType | ServiceResponseSuccessType> {
     const match = await this.model.findOne({
       where: { id },
     });
@@ -53,7 +56,13 @@ export default class MatchModel implements IMatchModel {
     return 'Match successfully updated!';
   }
 
-  public async create(match: IMatch): Promise<IMatch> {
+  public async create(match: IMatch): Promise<IMatch | ServiceResponseErrorType> {
+    const { homeTeamId, awayTeamId } = match;
+    const homeTeam = await this.model.findOne({ where: { homeTeamId } });
+    const awayTeam = await this.model.findOne({ where: { awayTeamId } });
+
+    if (!homeTeam || !awayTeam) return 'NOT_FOUND';
+
     const newMatch = await this.model.create(match);
 
     return newMatch;

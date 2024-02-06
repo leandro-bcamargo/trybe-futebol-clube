@@ -34,9 +34,13 @@ export default class MatchService {
     return { status: 'SUCCESSFUL', data: { message: updated } };
   }
 
-  public async create(match: IMatch): Promise<ServiceResponse<IMatch>> {
+  public async create(match: IMatch): Promise<ServiceResponse<IMatch | undefined>> {
     const newMatch = await this.matchModel.create(match);
 
-    return { status: 'CREATED', data: newMatch };
+    if (newMatch === 'NOT_FOUND') {
+      throw new CustomError('NOT_FOUND', 'There is no team with such id!');
+    }
+
+    return { status: 'CREATED', data: newMatch as IMatch };
   }
 }
