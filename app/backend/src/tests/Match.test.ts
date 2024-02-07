@@ -15,7 +15,7 @@ import LoginValidation from '../middlewares/LoginValidation';
 import JWT from '../utils/JWT';
 import TokenValidation from '../middlewares/TokenValidation';
 import TokenPayloadMock from './mocks/TokenPayloadMock';
-import CreateMatchBodyMock from './mocks/CreateMatchBodyMock';
+import {createMatchBodyMockInvalid, createMatchBodyMockValid} from './mocks/CreateMatchBodyMock';
 
 chai.use(chaiHttp);
 
@@ -104,11 +104,31 @@ describe('Matches test', () => {
 
   describe('Route POST /matches', async function() {
     it('Should return status 201 and create a match', async () => {
+      const findOneStub = sinon.stub(SequelizeTeamModel, 'findOne');
+      findOneStub.onCall(0).resolves(TeamsMock[0] as any);
+      findOneStub.onCall(1).resolves(TeamsMock[1] as any);
       sinon.stub(SequelizeMatchModel, 'create').resolves(matchMockWithId as any);
       sinon.stub(JWT, 'verify').returns(TokenPayloadMock);
-      const { status, body } = await chai.request(app).post('/matches').set('authorization', 'validToken').send(CreateMatchBodyMock);
+      const { status, body } = await chai.request(app).post('/matches').set('authorization', 'validToken').send(createMatchBodyMockValid);
       expect(status).to.be.equal(201);
       expect(body).to.deep.equal(matchMockWithId);
+    })
+
+    it('Should return status 404 if at least one of the teams isn\'t found', async function() {
+      const findOneStub = sinon.stub(SequelizeTeamModel, 'findOne');
+      findOneStub.onCall(0).resolves(null);
+      findOneStub.onCall(1).resolves(TeamsMock[1] as any);
+      sinon.stub(JWT, 'verify').returns(TokenPayloadMock);
+      const {status, body} = await chai.request(app).post('/matches').set('authorization', 'validToken').send(createMatchBodyMockValid);
+      expect(status).to.be.equal(404);
+      expect(body).to.deep.equal({message: 'There is no team with such id!'})
+    })
+
+    it('Should return status 422 if the home team and the away team are the same', async function() {
+      sinon.stub(JWT, 'verify').returns(TokenPayloadMock);
+      const {status, body} = await chai.request(app).post('/matches').set('authorization', 'validToken').send(createMatchBodyMockInvalid);
+      expect(status).to.be.equal(422);
+      expect(body).to.deep.equal({message: 'It is not possible to create a match with two equal teams'})
     })
   })
 })
