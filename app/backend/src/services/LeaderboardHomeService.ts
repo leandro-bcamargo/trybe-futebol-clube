@@ -2,6 +2,7 @@ import MatchModel from '../models/MatchModel';
 import IMatchModel from '../interfaces/IMatchModel';
 import ITeamModel from '../interfaces/ITeamModel';
 import TeamModel from '../models/TeamModel';
+import ILeaderboardItem from '../interfaces/ILeaderboardItem';
 
 export default class LeaderboardHomeService {
   public constructor(
@@ -19,7 +20,7 @@ export default class LeaderboardHomeService {
   }
 
   private async getHomeMatches(id: number) {
-    const matches = await this.matchModel.getAll();
+    const matches = await this.matchModel.getAll(false);
     const homeMatches = matches.filter((match) => match.homeTeamId === id);
 
     return homeMatches;
@@ -64,6 +65,19 @@ export default class LeaderboardHomeService {
     return homeMatches.reduce((goalsOwn, match) => goalsOwn + match.awayTeamGoals, 0);
   }
 
+  private async getGoalsBalance(id: number) {
+    const goalsFavor = await this.getGoalsFavor(id);
+    const goalsOwn = await this.getGoalsOwn(id);
+    return goalsFavor - goalsOwn;
+  }
+
+  private async getEfficiency(id: number) {
+    const totalPoints = await this.getTotalPoints(id);
+    const totalGames = await this.getTotalGames(id);
+    const result = (totalPoints / (totalGames * 3)) * 100;
+    return result.toFixed(2);
+  }
+
   private async buildLeaderboard() {
     const teams = await this.getTeams();
     const promisesArr = teams.map(async (team) => ({
@@ -75,13 +89,26 @@ export default class LeaderboardHomeService {
       totalLosses: await this.getTotalLosses(team.id),
       goalsFavor: await this.getGoalsFavor(team.id),
       goalsOwn: await this.getGoalsOwn(team.id),
+      goalsBalance: await this.getGoalsBalance(team.id),
+      efficiency: await this.getEfficiency(team.id),
     }));
     const leaderboard = await Promise.all(promisesArr);
     return leaderboard;
   }
 
+  private static sortLeaderboard(leaderboard: ILeaderboardItem[]) {
+    return [...leaderboard].sort((a, b) => {
+      if (a.totalPoints !== b.totalPoints) return b.totalPoints - a.totalPoints;
+      if (a.totalVictories !== b.totalVictories) return b.totalVictories - a.totalVictories;
+      if (a.goalsBalance !== b.goalsBalance) return b.goalsBalance - a.goalsBalance;
+      if (a.goalsFavor !== b.goalsFavor) return b.goalsFavor - a.goalsFavor;
+      return 0;
+    });
+  }
+
   public async getLeaderboard() {
     const leaderboard = await this.buildLeaderboard();
-    return { status: 'SUCCESSFUL', data: leaderboard };
+    const sortedLeaderboard = LeaderboardHomeService.sortLeaderboard(leaderboard);
+    return { status: 'SUCCESSFUL', data: sortedLeaderboard };
   }
 }
