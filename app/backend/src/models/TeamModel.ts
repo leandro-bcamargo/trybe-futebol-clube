@@ -7,12 +7,12 @@ export default class TeamModel implements ITeamModel {
 
   public async getAll(): Promise<ITeam[]> {
     const teams = await this.model.findAll();
-
     return teams;
   }
 
   public async getById(id: number): Promise<ITeam | null> {
     const team = await this.model.findOne({ where: { id } });
+    console.log('teammodel team:', team);
     if (!team) return null;
 
     return team;

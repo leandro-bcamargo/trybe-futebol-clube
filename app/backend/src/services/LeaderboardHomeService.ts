@@ -16,6 +16,7 @@ export default class LeaderboardHomeService {
 
   private async getName(id: number) {
     const team = await this.teamModel.getById(id);
+    // console.log('leaderboard service team', team)
     if (team) return team.teamName;
   }
 
@@ -109,6 +110,7 @@ export default class LeaderboardHomeService {
   public async getLeaderboard() {
     const leaderboard = await this.buildLeaderboard();
     const sortedLeaderboard = LeaderboardHomeService.sortLeaderboard(leaderboard);
+    // console.log('leaderboardhome service sortedleaderboard:', sortedLeaderboard);
     return { status: 'SUCCESSFUL', data: sortedLeaderboard };
   }
 }

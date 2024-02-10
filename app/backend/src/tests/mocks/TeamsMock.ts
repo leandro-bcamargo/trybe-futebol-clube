@@ -1,50 +1,66 @@
 export default [
-  {
-    team_name: 'Avaí/Kindermann',
-  },
-  {
-    team_name: 'Bahia',
-  },
-  {
-    team_name: 'Botafogo',
-  },
-  {
-    team_name: 'Corinthians',
-  },
-  {
-    team_name: 'Cruzeiro',
-  },
-  {
-    team_name: 'Ferroviária',
-  },
-  {
-    team_name: 'Flamengo',
-  },
-  {
-    team_name: 'Grêmio',
-  },
-  {
-    team_name: 'Internacional',
-  },
-  {
-    team_name: 'Minas Brasília',
-  },
-  {
-    team_name: 'Napoli-SC',
-  },
-  {
-    team_name: 'Palmeiras',
-  },
-  {
-    team_name: 'Real Brasília',
-  },
-  {
-    team_name: 'Santos',
-  },
-  {
-    team_name: 'São José-SP',
-  },
-  {
-    team_name: 'São Paulo',
-  },
+	{
+		"id": 1,
+		"teamName": "Avaí/Kindermann"
+	},
+	{
+		"id": 2,
+		"teamName": "Bahia"
+	},
+	{
+		"id": 3,
+		"teamName": "Botafogo"
+	},
+	{
+		"id": 4,
+		"teamName": "Corinthians"
+	},
+	{
+		"id": 5,
+		"teamName": "Cruzeiro"
+	},
+	{
+		"id": 6,
+		"teamName": "Ferroviária"
+	},
+	{
+		"id": 7,
+		"teamName": "Flamengo"
+	},
+	{
+		"id": 8,
+		"teamName": "Grêmio"
+	},
+	{
+		"id": 9,
+		"teamName": "Internacional"
+	},
+	{
+		"id": 10,
+		"teamName": "Minas Brasília"
+	},
+	{
+		"id": 11,
+		"teamName": "Napoli-SC"
+	},
+	{
+		"id": 12,
+		"teamName": "Palmeiras"
+	},
+	{
+		"id": 13,
+		"teamName": "Real Brasília"
+	},
+	{
+		"id": 14,
+		"teamName": "Santos"
+	},
+	{
+		"id": 15,
+		"teamName": "São José-SP"
+	},
+	{
+		"id": 16,
+		"teamName": "São Paulo"
+	}
 ]
