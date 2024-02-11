@@ -21,21 +21,20 @@ chai.use(chaiHttp);
 const { expect } = chai;
 
 describe('Leaderboard test', () => {
-  beforeEach(() => {
-    sinon.stub(SequelizeTeamModel, 'findAll').resolves(TeamsMock as any);
-    sinon.stub(SequelizeMatchModel, 'findAll').resolves(finishedMatchesMock as any);
-    sinon.stub(SequelizeTeamModel, 'findOne').resolves(TeamsMock[0] as any)
-    sinon.restore();
-  })
-
   afterEach(() => {
     sinon.restore();
   })
+
   describe('Route GET /leaderboard/home', () => {
     it('Should return status 200 and the leaderboard', async function() {
-      const {status, body} = await chai.request(app).get('/leaderboard/home');
-      expect(status).to.equal(200);
-      expect(body).to.deep.equal(LeaderboardHomeMock);
+    // sinon.stub(SequelizeTeamModel, 'findAll').resolves(TeamsMock as any);
+    sinon.stub(SequelizeMatchModel, 'findAll').resolves(finishedMatchesMock as any);
+    // TeamsMock.map((team, i) => {
+    //   sinon.stub(SequelizeTeamModel, 'findOne').onCall(i).resolves(team.teamName as any)
+    // })
+    const {status, body} = await chai.request(app).get('/leaderboard/home');
+    expect(status).to.equal(200);
+    expect(body).to.deep.equal(LeaderboardHomeMock);
     })
   })
 })
