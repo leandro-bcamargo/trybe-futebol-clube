@@ -15,10 +15,11 @@ export default class LeaderboardAwayService {
     return this.teamModel.getAll();
   }
 
-  private async getName(id: number) {
-    const team = await this.teamModel.getById(id);
-    if (team) return team.teamName;
-  }
+  // private async getName(id: number) {
+  //   const team = await this.teamModel.getById(id);
+  //   console.log('leaderboardawayservice team:', team);
+  //   if (team) return team.teamName;
+  // }
 
   private async getAwayMatches(id: number) {
     const matches = await this.matchModel.getAll(false);
@@ -74,9 +75,10 @@ export default class LeaderboardAwayService {
   private async buildLeaderboard() {
     const teams = await this.getTeams();
     const promisesArr = teams.map(async (team) => {
+      // console.log('leaderboardawayservice team:', team);
       const awayMatches = await this.getAwayMatches(team.id);
       return {
-        name: await this.getName(team.id),
+        name: team.teamName,
         totalPoints: await LeaderboardAwayService.getTotalPoints(awayMatches),
         totalGames: await LeaderboardAwayService.getTotalGames(awayMatches),
         totalVictories: await LeaderboardAwayService.getTotalVictories(awayMatches),
@@ -107,6 +109,7 @@ export default class LeaderboardAwayService {
   public async getLeaderboard() {
     const leaderboard = await this.buildLeaderboard();
     const sortedLeaderboard = LeaderboardAwayService.sortLeaderboard(leaderboard);
+    // console.log('leaderboardawayservice:', sortedLeaderboard);
     return { status: 'SUCCESSFUL', data: sortedLeaderboard };
   }
 }

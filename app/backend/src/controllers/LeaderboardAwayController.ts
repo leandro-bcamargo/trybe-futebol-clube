@@ -8,6 +8,7 @@ export default class LeaderboardAwayController {
   public async getLeaderboard(req: Request, res: Response, next: NextFunction) {
     try {
       const { status, data } = await this.leaderboardAwayService.getLeaderboard();
+      // console.log('leaderboardawaycontroller data:', data);
 
       return res.status(mapStatusHttp(status)).json(data);
     } catch (error) {

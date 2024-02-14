@@ -15,6 +15,7 @@ import TokenPayloadMock from './mocks/TokenPayloadMock';
 import {createMatchBodyMockInvalid, createMatchBodyMockValid} from './mocks/CreateMatchBodyMock';
 import LeaderboardHomeMock from './mocks/LeaderboardHomeMock';
 import TeamsMock from './mocks/TeamsMock';
+import LeaderboardAwayMock from './mocks/LeaderboardAwayMock';
 
 chai.use(chaiHttp);
 
@@ -25,16 +26,30 @@ describe('Leaderboard test', () => {
     sinon.restore();
   })
 
-  describe('Route GET /leaderboard/home', () => {
-    it('Should return status 200 and the leaderboard', async function() {
-    // sinon.stub(SequelizeTeamModel, 'findAll').resolves(TeamsMock as any);
+  beforeEach(() => {
+    sinon.restore();
+  })
+
+  describe('Route GET /leaderboard/home', async () => {
+    it('Should return status 200 and the home leaderboard', async function() {
+    sinon.stub(SequelizeTeamModel, 'findAll').resolves(TeamsMock as any);
     sinon.stub(SequelizeMatchModel, 'findAll').resolves(finishedMatchesMock as any);
     // TeamsMock.map((team, i) => {
     //   sinon.stub(SequelizeTeamModel, 'findOne').onCall(i).resolves(team.teamName as any)
     // })
     const {status, body} = await chai.request(app).get('/leaderboard/home');
-    expect(status).to.equal(200);
-    expect(body).to.deep.equal(LeaderboardHomeMock);
+    expect(status).to.be.equal(200);
+    expect(body).to.be.deep.equal(LeaderboardHomeMock);
+    })
+  })
+
+  describe('Route GET /leaderboard/away', async function() {
+    it('Should return status 200 and the away leaderboard', async function() {
+      sinon.stub(SequelizeTeamModel, 'findAll').resolves(TeamsMock as any);
+      sinon.stub(SequelizeMatchModel, 'findAll').resolves(finishedMatchesMock as any);
+      const {status, body} = await chai.request(app).get('/leaderboard/away');
+      expect(status).to.be.equal(200);
+      expect(body).to.be.deep.equal(LeaderboardAwayMock);
     })
   })
 })

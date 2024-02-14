@@ -82,7 +82,7 @@ export default class LeaderboardHomeService {
   private async buildLeaderboard() {
     const teams = await this.getTeams();
     const promisesArr = teams.map(async (team) => ({
-      name: await this.getName(team.id),
+      name: team.teamName,
       totalPoints: await this.getTotalPoints(team.id),
       totalGames: await this.getTotalGames(team.id),
       totalVictories: await this.getTotalVictories(team.id),
@@ -94,6 +94,7 @@ export default class LeaderboardHomeService {
       efficiency: await this.getEfficiency(team.id),
     }));
     const leaderboard = await Promise.all(promisesArr);
+    // console.log('leaderboardhomeservice leaderboard:', leaderboard);
     return leaderboard;
   }
 

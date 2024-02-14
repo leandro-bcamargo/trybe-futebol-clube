@@ -1,13 +1,13 @@
 export const createMatchBodyMockValid = {
-  homeTeam: 16,
-  awayTeam: 8,
+  homeTeamId: 16,
+  awayTeamId: 8,
   homeTeamGoals: 2,
   awayTeamGoals: 2
 }
 
 export const createMatchBodyMockInvalid = {
-  homeTeam: 1,
-  awayTeam: 1,
+  homeTeamId: 1,
+  awayTeamId: 1,
   homeTeamGoals: 2,
   awayTeamGoals: 2
 }
