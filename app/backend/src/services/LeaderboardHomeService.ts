@@ -1,3 +1,4 @@
+import IMatch from '../interfaces/IMatch';
 import MatchModel from '../models/MatchModel';
 import IMatchModel from '../interfaces/IMatchModel';
 import ITeamModel from '../interfaces/ITeamModel';
@@ -14,21 +15,12 @@ export default class LeaderboardHomeService {
     return this.teamModel.getAll();
   }
 
-  private async getName(id: number) {
-    const team = await this.teamModel.getById(id);
-    // console.log('leaderboard service team', team)
-    if (team) return team.teamName;
-  }
-
   private async getHomeMatches(id: number) {
     const matches = await this.matchModel.getAll(false);
-    const homeMatches = matches.filter((match) => match.homeTeamId === id);
-
-    return homeMatches;
+    return matches.filter((match) => match.homeTeamId === id);
   }
 
-  private async getTotalPoints(id: number) {
-    const homeMatches = await this.getHomeMatches(id);
+  private static async getTotalPoints(homeMatches: IMatch[]) {
     return homeMatches.reduce((totalPoints, match) => {
       if (match.homeTeamGoals > match.awayTeamGoals) return totalPoints + 3;
       if (match.homeTeamGoals === match.awayTeamGoals) return totalPoints + 1;
@@ -36,63 +28,61 @@ export default class LeaderboardHomeService {
     }, 0);
   }
 
-  private async getTotalGames(id: number) {
-    const homeMatches = await this.getHomeMatches(id);
+  private static async getTotalGames(homeMatches: IMatch[]) {
     return homeMatches.length;
   }
 
-  private async getTotalVictories(id: number) {
-    const homeMatches = await this.getHomeMatches(id);
+  private static async getTotalVictories(homeMatches: IMatch[]) {
     return homeMatches.filter((match) => match.homeTeamGoals > match.awayTeamGoals).length;
   }
 
-  private async getTotalDraws(id: number) {
-    const homeMatches = await this.getHomeMatches(id);
+  private static async getTotalDraws(homeMatches: IMatch[]) {
     return homeMatches.filter((match) => match.homeTeamGoals === match.awayTeamGoals).length;
   }
 
-  private async getTotalLosses(id: number) {
-    const homeMatches = await this.getHomeMatches(id);
+  private static async getTotalLosses(homeMatches: IMatch[]) {
     return homeMatches.filter((match) => match.homeTeamGoals < match.awayTeamGoals).length;
   }
 
-  private async getGoalsFavor(id: number) {
-    const homeMatches = await this.getHomeMatches(id);
+  private static async getGoalsFavor(homeMatches: IMatch[]) {
     return homeMatches.reduce((goalsFavor, match) => goalsFavor + match.homeTeamGoals, 0);
   }
 
-  private async getGoalsOwn(id: number) {
-    const homeMatches = await this.getHomeMatches(id);
+  private static async getGoalsOwn(homeMatches: IMatch[]) {
     return homeMatches.reduce((goalsOwn, match) => goalsOwn + match.awayTeamGoals, 0);
   }
 
-  private async getGoalsBalance(id: number) {
-    const goalsFavor = await this.getGoalsFavor(id);
-    const goalsOwn = await this.getGoalsOwn(id);
+  private static async getGoalsBalance(homeMatches: IMatch[]) {
+    const goalsFavor = await LeaderboardHomeService.getGoalsFavor(homeMatches);
+    const goalsOwn = await LeaderboardHomeService.getGoalsOwn(homeMatches);
     return goalsFavor - goalsOwn;
   }
 
-  private async getEfficiency(id: number) {
-    const totalPoints = await this.getTotalPoints(id);
-    const totalGames = await this.getTotalGames(id);
+  private static async getEfficiency(homeMatches: IMatch[]) {
+    const totalPoints = await LeaderboardHomeService.getTotalPoints(homeMatches);
+    const totalGames = await LeaderboardHomeService.getTotalGames(homeMatches);
     const result = (totalPoints / (totalGames * 3)) * 100;
     return result.toFixed(2);
   }
 
   private async buildLeaderboard() {
     const teams = await this.getTeams();
-    const promisesArr = teams.map(async (team) => ({
-      name: team.teamName,
-      totalPoints: await this.getTotalPoints(team.id),
-      totalGames: await this.getTotalGames(team.id),
-      totalVictories: await this.getTotalVictories(team.id),
-      totalDraws: await this.getTotalDraws(team.id),
-      totalLosses: await this.getTotalLosses(team.id),
-      goalsFavor: await this.getGoalsFavor(team.id),
-      goalsOwn: await this.getGoalsOwn(team.id),
-      goalsBalance: await this.getGoalsBalance(team.id),
-      efficiency: await this.getEfficiency(team.id),
-    }));
+    const promisesArr = teams.map(async (team) => {
+      const homeMatches = await this.getHomeMatches(team.id);
+      return {
+        name: team.teamName,
+        totalPoints: await LeaderboardHomeService.getTotalPoints(homeMatches),
+        totalGames: await LeaderboardHomeService.getTotalGames(homeMatches),
+        totalVictories: await LeaderboardHomeService.getTotalVictories(homeMatches),
+        totalDraws: await LeaderboardHomeService.getTotalDraws(homeMatches),
+        totalLosses: await LeaderboardHomeService.getTotalLosses(homeMatches),
+        goalsFavor: await LeaderboardHomeService.getGoalsFavor(homeMatches),
+        goalsOwn: await LeaderboardHomeService.getGoalsOwn(homeMatches),
+        goalsBalance: await LeaderboardHomeService.getGoalsBalance(homeMatches),
+        efficiency: await LeaderboardHomeService.getEfficiency(homeMatches),
+      };
+    });
+
     const leaderboard = await Promise.all(promisesArr);
     // console.log('leaderboardhomeservice leaderboard:', leaderboard);
     return leaderboard;

@@ -15,12 +15,6 @@ export default class LeaderboardAwayService {
     return this.teamModel.getAll();
   }
 
-  // private async getName(id: number) {
-  //   const team = await this.teamModel.getById(id);
-  //   console.log('leaderboardawayservice team:', team);
-  //   if (team) return team.teamName;
-  // }
-
   private async getAwayMatches(id: number) {
     const matches = await this.matchModel.getAll(false);
 
