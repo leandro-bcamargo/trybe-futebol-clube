@@ -20,7 +20,6 @@ export default class LoginValidation {
   }
 
   static handleError(error: Joi.ValidationError) {
-    // console.log('login validation error:', error)
     const { type } = error.details[0];
     const { message } = error.details[0];
     if (type === 'any.required') throw new CustomError('INVALID_DATA', message);

@@ -16,7 +16,6 @@ export default class MatchService {
 
   public async finishMatch(id: number): Promise<ServiceResponse<ServiceMessage>> {
     const finished = await this.matchModel.finishMatch(id);
-    // console.log('match service finished:', finished);
 
     if (finished === 'NOT_FOUND') throw new CustomError('NOT_FOUND', 'Match not found');
 

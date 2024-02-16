@@ -4,16 +4,11 @@ import chai from 'chai';
 import chaiHttp from 'chai-http';
 
 import { app } from '../app';
-import Example from '../database/models/ExampleModel';
-
-import { Response } from 'superagent';
 import SequelizeTeamModel from '../database/models/SequelizeTeamModel';
 import TeamsMock from './mocks/TeamsMock';
 import SequelizeMatchModel from '../database/models/SequelizeMatchModel';
 import { allMatchesMock, finishedMatchesMock, inProgressMatchesMock, matchMockWithId } from './mocks/MatchesMock';
-import LoginValidation from '../middlewares/LoginValidation';
 import JWT from '../utils/JWT';
-import TokenValidation from '../middlewares/TokenValidation';
 import TokenPayloadMock from './mocks/TokenPayloadMock';
 import {createMatchBodyMockInvalid, createMatchBodyMockValid} from './mocks/CreateMatchBodyMock';
 

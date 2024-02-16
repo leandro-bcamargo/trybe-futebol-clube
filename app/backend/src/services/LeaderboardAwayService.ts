@@ -69,7 +69,6 @@ export default class LeaderboardAwayService {
   private async buildLeaderboard() {
     const teams = await this.getTeams();
     const promisesArr = teams.map(async (team) => {
-      // console.log('leaderboardawayservice team:', team);
       const awayMatches = await this.getAwayMatches(team.id);
       return {
         name: team.teamName,
@@ -86,7 +85,6 @@ export default class LeaderboardAwayService {
     });
 
     const leaderboard = await Promise.all(promisesArr);
-    // console.log('leaderboard away service leaderboard:', leaderboard)
     return leaderboard;
   }
 
@@ -103,7 +101,7 @@ export default class LeaderboardAwayService {
   public async getLeaderboard() {
     const leaderboard = await this.buildLeaderboard();
     const sortedLeaderboard = LeaderboardAwayService.sortLeaderboard(leaderboard);
-    // console.log('leaderboardawayservice:', sortedLeaderboard);
+
     return { status: 'SUCCESSFUL', data: sortedLeaderboard };
   }
 }

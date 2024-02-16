@@ -4,7 +4,6 @@ import mapStatusHttp from '../utils/mapStatusHttp';
 
 export default class ErrorMiddleware {
   public static error(err: Error, req: Request, res: Response, _next: NextFunction) {
-    // console.log('error middleware err:', err);
     if (err instanceof CustomError) {
       const { status, message } = err;
       return res.status(mapStatusHttp(status)).json({ message });

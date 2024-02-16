@@ -4,9 +4,7 @@ import chai from 'chai';
 import chaiHttp from 'chai-http';
 
 import { app } from '../app';
-import Example from '../database/models/ExampleModel';
 
-import { Response } from 'superagent';
 import SequelizeTeamModel from '../database/models/SequelizeTeamModel';
 import TeamsMock from './mocks/TeamsMock';
 

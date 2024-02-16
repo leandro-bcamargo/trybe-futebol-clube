@@ -84,7 +84,7 @@ export default class LeaderboardHomeService {
     });
 
     const leaderboard = await Promise.all(promisesArr);
-    // console.log('leaderboardhomeservice leaderboard:', leaderboard);
+
     return leaderboard;
   }
 
@@ -101,7 +101,7 @@ export default class LeaderboardHomeService {
   public async getLeaderboard() {
     const leaderboard = await this.buildLeaderboard();
     const sortedLeaderboard = LeaderboardHomeService.sortLeaderboard(leaderboard);
-    // console.log('leaderboardhome service sortedleaderboard:', sortedLeaderboard);
+
     return { status: 'SUCCESSFUL', data: sortedLeaderboard };
   }
 }
